@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Internal Server Error{% endblock %}
+
+{% block content %}
+    <div class="container error">
+        <h2>500 - Internal Server Error</h2>
+        <p>The server could not process your request.</p>
+        <p><a href="{{ url_for('index') }}">Go to search</a></p>
+    </div>
+{% endblock %}

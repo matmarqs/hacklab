@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if request.args.get('q') %}{{ request.args.get('q') }} - {% endif %}Search
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% if request.args.get('q') %}
+            <div class="search-results">
+                <h2>
+                    {% if results %}
+                        {{ results|length }} result(s) for "{{ request.args.get('q') }}"
+                    {% else %}
+                        No results for "{{ request.args.get('q') }}"
+                    {% endif %}
+                </h2>
+
+                {% if results %}
+                    <ul class="results-list">
+                        {% for filepath in results %}
+                            <li>
+                                <a href="{{ url_for('view_file', f=filepath) }}">{{ filepath }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="no-results">Try different keywords or check your spelling.</p>
+                {% endif %}
+
+                <p><a href="{{ url_for('index') }}">← New search</a></p>
+            </div>
+        {% else %}
+            <div class="welcome">
+                <h2>Search your offensive security cheatsheets</h2>
+                <p>Type your search above to find commands, techniques, and notes for HTB, CPTS, and OSCP.</p>
+
+                <div class="examples">
+                    <h3>Example searches:</h3>
+                    <ul>
+                        <li><code>nmap -sV</code></li>
+                        <li><code>kerberoasting</code></li>
+                        <li><code>sql injection</code></li>
+                        <li><code>port forwarding</code></li>
+                        <li><code>active directory</code></li>
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

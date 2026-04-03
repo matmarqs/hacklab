@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ filepath }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="view-header">
+            <nav>
+                <a href="{{ url_for('index', q=search_query) }}">← Back to search</a>
+                <span class="separator">•</span>
+                <span class="filepath">{{ filepath }}</span>
+            </nav>
+        </div>
+
+        <!-- Base tag fixes all relative URLs -->
+        {% set base_dir = filepath|dirname %}
+        <base href="/static/cheatsheets/{{ base_dir }}/">
+
+        <article class="markdown-body">
+            {{ content|safe }}
+        </article>
+    </div>
+{% endblock %}

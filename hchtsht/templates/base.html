@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Cheatsheets{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-dark.min.css">
+    <!-- Add highlight.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+    <div class="app">
+        <header>
+            <div class="header-content">
+                <h1><a href="{{ url_for('index') }}">📚 Cheatsheets</a></h1>
+                <form action="{{ url_for('index') }}" method="get" class="search-form">
+                    <input type="text" name="q" value="{{ request.args.get('q', '') }}" 
+                           placeholder="Search (e.g., nmap, sql, kerberoast...)" autofocus>
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </header>
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer>
+            <p>Search powered by ripgrep • Built for HTB/CPTS/OSCP</p>
+        </footer>
+    </div>
+</body>
+</html>
