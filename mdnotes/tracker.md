@@ -1,47 +1,42 @@
 # 📚 Estudo da Semana
 
-**Semana:** 03/10/2025 -> 09/11/2025
+**Semana:** 08/05/2026 -> 14/05/2026
 
 ---
 
 ## ✅ Objetivos da Semana
 
-- **HTB**:
-  - [ ] Progredir no módulo (gigante) **Active Directory Enumeration & Attacks**
+- **malisp**:
+  - [ ] Debuggar o código e terminar a implementação da keyword `fn*` sem leaks ou use-after-frees.
 - **Ônibus**:
-  - [ ] Assistir / estudar para a Security+ com os vídeos do Professor Messer.
+  - [ ] Terminar o capítulo 4 do Advanced Programming in the UNIX Environment. Escrever os códigos no github.
 - **À noite**
-  - Assistir 4 vídeos do IppSec:
-    - [ ] **FriendZone**
-    - [ ] **LaCasaDePapel**
-    - [ ] **Lightweight**
-    - [ ] **Networked**.
-- **pwn.college**
-  - [ ] Progredir em **Intro to Cybersecurity -- Intercepting Communication**.
+  - Estou pensando em assistir essa playlist, de um curso de sistemas operacionais da UC Berkeley.
+  - [https://www.youtube.com/playlist?list=PLF2K2xZjNEf97A_uBCwEl61sdxWVP7VWC](CS 162: Operating Systems)
 
 ---
 
 ## 📊 Progresso por Área
 
-### 🔹 HTB (Foco principal – 70%)
+### 🔹 Projetos em C (malisp, apue) (Foco principal – 80%)
 - **Carga:** 5h-10h/semana (1h ou 2h por dia no trabalho: segunda, terça, quarta, quinta e sexta)
 - **Status:**
 - **Notas:**
 
-### 🔹 Security+ (Foco médio – 20%)
-- **Carga:** Quando estiver no ônibus (praticamente umas 2h por dia)
+### 🔹 Leitura APUE (Foco baixo – 10%)
+- **Carga:** Quando estiver no ônibus (2h por dia, segunda, terça e quarta)
 - **Status:**
 - **Notas:**
 
-### 🔹 pwn.college (Foco baixo – 10%)
-- **Carga:** 2h/semana (sábado quando tiver tempo)
+### 🔹 Playlist Sistemas Operacionais (Foco baixo – 10%)
+- **Carga:** 1h/dia, à noite
 - **Status:**
 - **Notas:**
 
 ---
 
 ## 📝 Reflexão da Semana
-*(Tire 15 minutos no domingo)*  
+*(Tirar 15 minutos no domingo)*
 - **O que consegui bem:**
 - **O que faltou:**
 - **O que ajustar para semana que vem:**
