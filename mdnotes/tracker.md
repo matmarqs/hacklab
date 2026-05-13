@@ -7,12 +7,11 @@
 ## ✅ Objetivos da Semana
 
 - **malisp**:
-  - [ ] Debuggar o código e terminar a implementação da keyword `fn*` sem leaks ou use-after-frees.
+  - [X] Debuggar o código e terminar a implementação da keyword `fn*` sem leaks ou use-after-frees.
 - **Ônibus**:
   - [ ] Terminar o capítulo 4 do Advanced Programming in the UNIX Environment. Escrever os códigos no github.
 - **À noite**
-  - Estou pensando em assistir essa playlist, de um curso de sistemas operacionais da UC Berkeley.
-  - [https://www.youtube.com/playlist?list=PLF2K2xZjNEf97A_uBCwEl61sdxWVP7VWC](CS 162: Operating Systems)
+  - [ ] Assistir a playlist do [curso de sistemas operacionais da UC Berkeley](https://www.youtube.com/playlist?list=PLF2K2xZjNEf97A_uBCwEl61sdxWVP7VWC).
 
 ---
 
