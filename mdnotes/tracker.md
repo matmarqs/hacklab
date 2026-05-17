@@ -1,34 +1,35 @@
 # 📚 Estudo da Semana
 
-**Semana:** 08/05/2026 -> 14/05/2026
+**Semana:** 17/05/2026 -> 24/05/2026
 
 ---
 
 ## ✅ Objetivos da Semana
 
 - **malisp**:
-  - [ ] Debuggar o código e terminar a implementação da keyword `fn*` sem leaks ou use-after-frees.
+  - [ ] Fazer parte do Step 6: Files, Mutation, and Evil. Vai dar um pouco de trabalho, pois tem que implementar strings.
+- **cpsx**:
+  - [ ] Implementar algumas instruções. Vamos dizer, umas 5?
 - **Ônibus**:
   - [ ] Terminar o capítulo 4 do Advanced Programming in the UNIX Environment. Escrever os códigos no github.
 - **À noite**
-  - Estou pensando em assistir essa playlist, de um curso de sistemas operacionais da UC Berkeley.
-  - [https://www.youtube.com/playlist?list=PLF2K2xZjNEf97A_uBCwEl61sdxWVP7VWC](CS 162: Operating Systems)
+  - [ ] Assistir dois vídeos da playlist  de sistemas operacionais da UC Berkeley. [https://www.youtube.com/playlist?list=PLF2K2xZjNEf97A_uBCwEl61sdxWVP7VWC](CS 162: Operating Systems).
 
 ---
 
 ## 📊 Progresso por Área
 
-### 🔹 Projetos em C (malisp, apue) (Foco principal – 80%)
+### 🔹 Projetos em C (malisp, cpsx) (Foco principal – 70%)
 - **Carga:** 5h-10h/semana (1h ou 2h por dia no trabalho: segunda, terça, quarta, quinta e sexta)
 - **Status:**
 - **Notas:**
 
-### 🔹 Leitura APUE (Foco baixo – 10%)
+### 🔹 Leitura APUE (Foco baixo – 15%)
 - **Carga:** Quando estiver no ônibus (2h por dia, segunda, terça e quarta)
 - **Status:**
 - **Notas:**
 
-### 🔹 Playlist Sistemas Operacionais (Foco baixo – 10%)
+### 🔹 Playlist Sistemas Operacionais (Foco baixo – 15%)
 - **Carga:** 1h/dia, à noite
 - **Status:**
 - **Notas:**
