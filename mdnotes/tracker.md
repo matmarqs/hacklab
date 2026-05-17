@@ -13,7 +13,7 @@
 - **Ônibus**:
   - [ ] Terminar o capítulo 4 do Advanced Programming in the UNIX Environment. Escrever os códigos no github.
 - **À noite**
-  - [ ] Assistir dois vídeos da playlist  de sistemas operacionais da UC Berkeley. [https://www.youtube.com/playlist?list=PLF2K2xZjNEf97A_uBCwEl61sdxWVP7VWC](CS 162: Operating Systems).
+  - [ ] Assistir dois vídeos da [playlist de sistemas operacionais da UC Berkeley](https://www.youtube.com/playlist?list=PLF2K2xZjNEf97A_uBCwEl61sdxWVP7VWC).
 
 ---
 
