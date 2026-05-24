@@ -6,20 +6,20 @@
 
 ## ✅ Objetivos da Semana
 
-- **malisp**:
-  - [ ] Fazer parte do Step 6: Files, Mutation, and Evil. Vai dar um pouco de trabalho, pois tem que implementar strings.
 - **cpsx**:
-  - [ ] Implementar algumas instruções. Vamos dizer, umas 5?
+  - [ ] Implementar mais 5 instruções pelo menos.
 - **Ônibus**:
-  - [ ] Terminar o capítulo 4 do Advanced Programming in the UNIX Environment. Escrever os códigos no github.
+  - [ ] Tentar ler o capítulo 5 do APUE (Standard I/O Library). Se não der para terminar tudo bem.
 - **À noite**
-  - [ ] Assistir dois vídeos da [playlist de sistemas operacionais da UC Berkeley](https://www.youtube.com/playlist?list=PLF2K2xZjNEf97A_uBCwEl61sdxWVP7VWC).
+  - [ ] Assistir 2 vídeos da [playlist de OSes CS162 da UC Berkeley](https://www.youtube.com/playlist?list=PLF2K2xZjNEf97A_uBCwEl61sdxWVP7VWC).
+  - [ ] Assistir a Week 2 e Week 3 da [playlist APUE NetBSD](https://www.youtube.com/playlist?list=PL0qfF8MrJ-jxMfirAdxDs9zIiBg2Wug0z).
+  - [ ] Fazer exercícios que eu achar interessante do APUE NetBSD ou do CS162.
 
 ---
 
 ## 📊 Progresso por Área
 
-### 🔹 Projetos em C (malisp, cpsx) (Foco principal – 70%)
+### 🔹 Projetos em C (cpsx) (Foco principal – 70%)
 - **Carga:** 5h-10h/semana (1h ou 2h por dia no trabalho: segunda, terça, quarta, quinta e sexta)
 - **Status:**
 - **Notas:**
@@ -29,7 +29,7 @@
 - **Status:**
 - **Notas:**
 
-### 🔹 Playlist Sistemas Operacionais (Foco baixo – 15%)
+### 🔹 Playlists CS162 e APUE NetBSD (Foco baixo – 15%)
 - **Carga:** 1h/dia, à noite
 - **Status:**
 - **Notas:**
