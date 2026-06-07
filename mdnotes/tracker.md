@@ -1,23 +1,23 @@
 # 📚 Estudo da Semana
 
-**Semana:** 01/06/2026 -> 07/06/2026
+**Semana:** 08/06/2026 -> 14/06/2026
 
 ---
 
 ## ✅ Objetivos da Semana
 
 - **cpsx**:
-  - [ ] Implementar mais ~10 instruções.
+  - [ ] Implementar mais ~10 instruções. Acredito que as próximas instruções sejam mais rápidas.
 - **Ônibus**:
-  - [ ] Ler o capítulo 7 do APUE (System Data Files and Information).
+  - [ ] Ler o capítulo 7 do APUE (Process Environment).
 - **À noite**
   - [ ] Assistir 2 vídeos da [playlist de OSes CS162 da UC Berkeley](https://www.youtube.com/playlist?list=PLF2K2xZjNEf97A_uBCwEl61sdxWVP7VWC):
-      - CS162 Lecture 5: Abstractions 3: IPC, Pipes and Sockets. (já assisti a metade)
-      - CS162: Lecture 6: Synchronization 1: Concurrency and Mutual Exclusion
+    - [ ] CS162: Lecture 6: Synchronization 1: Concurrency and Mutual Exclusion
+    - [ ] CS162: Lecture 6.5: Concurrency and Mutual Exclusion (Supplemental)
   - [ ] Assistir a Week 3 da [playlist CS631 APUE NetBSD](https://www.youtube.com/playlist?list=PL0qfF8MrJ-jxMfirAdxDs9zIiBg2Wug0z).
   - [ ] Fazer exercícios que eu achar interessante do APUE NetBSD ou do CS162.
-      - Eu provavelmente vou querer ler mais a documentação do PintOS, e fazer as homeworks do CS162.
-      - As do CS631 não estão tão interessantes até então.
+      - [ ] Depois de assistir as lectures, dar uma olhada na Homework 1 e Project 1 do CS162.
+      - [ ] Os exercícios do CS631 não estão tão interessantes até então, focar em assistir a playlist.
 
 ---
 
