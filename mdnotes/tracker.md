@@ -1,20 +1,20 @@
 # 📚 Estudo da Semana
 
-**Semana:** 08/06/2026 -> 14/06/2026
+**Semana:** 15/06/2026 -> 21/06/2026
 
 ---
 
 ## ✅ Objetivos da Semana
 
 - **cpsx**:
-  - [ ] Implementar mais ~10 instruções. Acredito que as próximas instruções sejam mais rápidas.
+  - [ ] Implementar ~10 instruções.
 - **Ônibus**:
-  - [ ] Ler o capítulo 7 do APUE (Process Environment).
+  - [ ] Ler o capítulo 8 do APUE (Process Control). Esse capítulo é maior, 56 páginas.
 - **À noite**
   - [ ] Assistir 2 vídeos da [playlist de OSes CS162 da UC Berkeley](https://www.youtube.com/playlist?list=PLF2K2xZjNEf97A_uBCwEl61sdxWVP7VWC):
-    - [ ] CS162: Lecture 6: Synchronization 1: Concurrency and Mutual Exclusion
-    - [ ] CS162: Lecture 6.5: Concurrency and Mutual Exclusion (Supplemental)
-  - [ ] Assistir a Week 3 da [playlist CS631 APUE NetBSD](https://www.youtube.com/playlist?list=PL0qfF8MrJ-jxMfirAdxDs9zIiBg2Wug0z).
+    - [ ] CS162 Lecture 7: Synchronization 2: Semaphores (Con't), Lock Implementation, Atomic Instructions
+    - [ ] CS162 Lecture 8: Synchronization 3: Atomic Instructions (Con't), Monitors, Readers/Writers
+  - [ ] Terminar a Week 3 da [playlist CS631 APUE NetBSD](https://www.youtube.com/playlist?list=PL0qfF8MrJ-jxMfirAdxDs9zIiBg2Wug0z).
   - [ ] Fazer exercícios que eu achar interessante do APUE NetBSD ou do CS162.
       - [ ] Depois de assistir as lectures, dar uma olhada na Homework 1 e Project 1 do CS162.
       - [ ] Os exercícios do CS631 não estão tão interessantes até então, focar em assistir a playlist.
